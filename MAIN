@@ -13,6 +13,14 @@ BLUE = (78,113,228)
 GREEN = (55,206,45)
 
 #functions
+def draw_line():
+    pass
+def draw_L():
+    pass
+def draw_square():
+    pass
+def draw_pyramid():
+    pass
 def Randmom_shape():
     pass
 def Randmom_colour():
