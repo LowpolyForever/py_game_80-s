@@ -13,6 +13,8 @@ BLUE = (78,113,228)
 GREEN = (55,206,45)
 
 #functions
+def shape_rotate():
+    pass
 def draw_line():
     pass
 def draw_L():
@@ -27,6 +29,12 @@ def Randmom_colour():
     pass
 def shape_placer():
     pass
+    random_shape()
+    random_colour()
+    if #keypressed
+        shape_rotate()
+    if #keypressed
+        shape_position_save()
 def shape_position_save():
     pass
 
