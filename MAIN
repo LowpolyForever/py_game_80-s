@@ -4,7 +4,7 @@ import pygame
 pygame.init()
 
 #constants
-SCREEN_DIMENSIONS = (640, 480)
+SCREEN_DIMENSIONS = (640,480)
 
 #Colors
 BLACK = (0,0,0)
@@ -22,7 +22,8 @@ while not game_over:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             game_over = True
 
-    pygame.draw.circle((screen), (WHITE), (300,200), (30)) #circle
+    pygame.draw.rect((screen), (WHITE), ((110,30),(420,420)), (5)) #make tetris boundary
+
 
     pygame.display.flip()
 
