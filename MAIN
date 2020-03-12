@@ -1,5 +1,27 @@
-#test
-#test
+#Scuffed Tetris (Brian, Leo, Harris)
 
-print("hello world") 
+import pygame
+pygame.init()
+
+#constants
+SCREEN_DIMENSIONS = (640, 480)
+
+#Colors
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+BLUE = (78,113,228)
+GREEN = (55,206,45)
+
+#Setup
+screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
+pygame.display.set_caption ("MAIN")
+
+game_over = False
+while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            game_over = True
+
+
+
 
