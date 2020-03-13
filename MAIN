@@ -21,7 +21,7 @@ pygame.display.set_caption ("MAIN")
 game_over = False
 while not game_over:
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: #Quits Game when escape room
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: #Quits Game when escape key pressed
             game_over = True
 
     pygame.draw.rect((screen), (WHITE), ((110,30),(420,420)), (5)) #make play area boundary
