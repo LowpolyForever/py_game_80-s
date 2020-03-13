@@ -29,7 +29,7 @@ game_over = False
 while not game_over:
     pygame.time.delay(10)#delays each frame by 10 millisecs
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: #Quits Game when escape room
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: #Quits Game when escape key pressed
             game_over = True
 
     if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT: #moves mario left
