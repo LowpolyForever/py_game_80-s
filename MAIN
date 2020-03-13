@@ -1,4 +1,4 @@
-#Scuffed Tetris (Brian, Leo, Harris)
+#Scuffed Donky KONG (Brian, Leo, Harris)
 
 import pygame
 pygame.init()
@@ -13,30 +13,6 @@ BLUE = (78,113,228)
 GREEN = (55,206,45)
 
 #functions
-def shape_rotate():
-    pass
-def draw_line():
-    pass
-def draw_L():
-    pass
-def draw_square():
-    pass
-def draw_pyramid():
-    pass
-def Randmom_shape():
-    pass
-def Randmom_colour():
-    pass
-def shape_placer():
-    pass
-    random_shape()
-    random_colour()
-    if #keypressed
-        shape_rotate()
-    if #keypressed
-        shape_position_save()
-def shape_position_save():
-    pass
 
 #Setup
 screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
@@ -48,7 +24,7 @@ while not game_over:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             game_over = True
 
-    pygame.draw.rect((screen), (WHITE), ((110,30),(420,420)), (5)) #make tetris boundary
+    pygame.draw.rect((screen), (WHITE), ((110,30),(420,420)), (5)) #make play area boundary
 
     pygame.display.flip()
 
