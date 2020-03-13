@@ -7,32 +7,40 @@ pygame.init()
 SCREEN_DIMENSIONS = (480,640)
 GROUND_HEIGHT = (620)
 gravity = (2)
-jump_limit = GROUND_HEIGHT - 50
+jump_limit = GROUND_HEIGHT - 20
 
 #Colors
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 BLUE = (78,113,228)
 GREEN = (55,206,45)
+GREY = (181, 181, 181)
 
 #Mario Position
 x = (240)
 y = (620)
 velocity = 3
 
-#functions
+#functions       
+def drawing(screen, BLACK, WHITE, GREY, x, y):
+    screen.fill(BLACK)  # Fills the screen with black
+    pygame.draw.rect((screen), (BLUE), ((x,y),(10,-20)),) #draws mario
+    pygame.draw.rect((screen), (WHITE), ((0,620),(480,20)),) #draws floor
+    
+
+
 
 #Setup
 screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
 pygame.display.set_caption ("MAIN")
 
+#MAIN LOOP --------------------------------------------
 game_over = False
 while not game_over:
     pygame.time.delay(10)#delays each frame by 10 millisecs
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: #Quits Game when escape key pressed
             game_over = True
-
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_LEFT]: #moves mario left
@@ -44,9 +52,7 @@ while not game_over:
     if y < GROUND_HEIGHT: #gives mario gravity
         y = y + 1 * gravity
 
-
-    screen.fill((0,0,0))  # Fills the screen with black
-    pygame.draw.rect((screen), (WHITE), ((x,y),(10,-20)),) #draws mario
+    drawing(screen, BLACK, WHITE, GREY, x, y)
 
     pygame.display.update()
 
