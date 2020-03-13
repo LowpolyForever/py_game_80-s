@@ -4,13 +4,20 @@ import pygame
 pygame.init()
 
 #constants
-SCREEN_DIMENSIONS = (640,480)
+SCREEN_DIMENSIONS = (480,640)
+GROUND_HEIGHT = (620)
+gravity = (2)
 
 #Colors
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 BLUE = (78,113,228)
 GREEN = (55,206,45)
+
+#Mario Position
+x = (240)
+y = (620)
+velocity = 3
 
 #functions
 
@@ -20,13 +27,25 @@ pygame.display.set_caption ("MAIN")
 
 game_over = False
 while not game_over:
+    pygame.time.delay(10)#delays each frame by 10 millisecs
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: #Quits Game when escape room
             game_over = True
 
-    pygame.draw.rect((screen), (WHITE), ((110,30),(420,420)), (5)) #make play area boundary
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT: #moves mario left
+        x = x - 1 * velocity
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT: #moves mario right
+        x = x + 1 * velocity
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE: #makes mario jump
+        y = y - 4
+    if y < GROUND_HEIGHT:
+        y = y + 1 * gravity
+    
 
-    pygame.display.flip()
+    screen.fill((0,0,0))  # Fills the screen with black
+    pygame.draw.rect((screen), (WHITE), ((x,y),(10,-20)),) #draws mario
+
+    pygame.display.update()
 
     
 
