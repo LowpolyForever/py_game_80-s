@@ -27,7 +27,7 @@ def drawing(screen, BLACK, WHITE, GREY, x, y):
     pygame.draw.rect(
         (screen), (BLUE), ((x,y),(10,-20)),) #draws mario
     pygame.draw.rect((screen), (WHITE), ((0,620),(480,20)),) #draws floor
-    pygame.draw.rect((screen), (WHITE), ((0,580),(400,5)),) #draws second floor
+    pygame.draw.rect((screen), (WHITE), ((0,580),(400,-5)),) #draws second floor
     
 
 
@@ -55,17 +55,21 @@ while not game_over:
         y = y + 1 * gravity
     #ground height detect
     if y < 580:
-        GROUND_HEIGHT = 580
+        GROUND_HEIGHT = 575
     if x > 400:
         GROUND_HEIGHT = 620
     #ceiling detection
     if y > 580 and x < 400:
         jump_limit = 600
     else:
-        jump_limit = 560
-        
+        jump_limit = 555
+    #edge dtection
+    if x > 470:
+        x = 470
+    if x < 0:
+        x = 0
 
-
+    
     drawing(screen, BLACK, WHITE, GREY, x, y)
 
     pygame.display.update()
