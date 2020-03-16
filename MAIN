@@ -7,8 +7,8 @@ pygame.init()
 SCREEN_DIMENSIONS = (480,640)
 GROUND_HEIGHT = (620)
 gravity = (2)
-J_offset = (-20)
-jump_limit = GROUND_HEIGHT - J_offset
+jump_limit = GROUND_HEIGHT - 20
+
 #Colors
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -24,9 +24,10 @@ velocity = 3
 #functions 
 def drawing(screen, BLACK, WHITE, GREY, x, y):
     screen.fill(BLACK)  # Fills the screen with black
-    pygame.draw.rect((screen), (BLUE), ((x,y),(10,-20)),) #draws mario
+    pygame.draw.rect(
+        (screen), (BLUE), ((x,y),(10,-20)),) #draws mario
     pygame.draw.rect((screen), (WHITE), ((0,620),(480,20)),) #draws floor
-    pygame.draw.rect((screen), (WHITE), ((0,580),(400,-5)),) #draws second floor
+    pygame.draw.rect((screen), (WHITE), ((0,580),(400,5)),) #draws second floor
     
 
 
@@ -58,11 +59,12 @@ while not game_over:
     if x > 400:
         GROUND_HEIGHT = 620
     #ceiling detection
-    if y >= 580 and x <= 400:
-        J_offset = -20
+    if y > 580 and x < 400:
+        jump_limit = 600
     else:
-        J_offset = -40
+        jump_limit = 560
         
+
 
     drawing(screen, BLACK, WHITE, GREY, x, y)
 
