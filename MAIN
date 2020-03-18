@@ -55,7 +55,7 @@ while not game_over:
     if y < GROUND_HEIGHT: #gives mario gravity
         y = y + 1 * gravity
     #ground height detect
-    if y < 580:
+    if y < 575:
         GROUND_HEIGHT = 575
     if x > 400 and y < 580:
         GROUND_HEIGHT = 620
