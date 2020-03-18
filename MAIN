@@ -73,7 +73,7 @@ while not game_over:
         x = 470
     if x < 0:
         x = 0
- 
+
     
     drawing(screen, BLACK, WHITE, GREY, x, y)
 
