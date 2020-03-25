@@ -55,7 +55,7 @@ while not game_over:
     if y < GROUND_HEIGHT: #gives mario gravity
         y = y + 1 * gravity
     #ground height detect
-    if y < 575:
+    if y < 575 and y > 535:
         GROUND_HEIGHT = 575
     if x > 400 and y < 580:
         GROUND_HEIGHT = 620
@@ -76,6 +76,7 @@ while not game_over:
 
     
     drawing(screen, BLACK, WHITE, GREY, x, y)
+    print(x,y)
 
     pygame.display.update()
 
