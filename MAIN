@@ -4,10 +4,9 @@ import pygame
 pygame.init()
 
 #constants
-SCREEN_DIMENSIONS = (480,640)
-GROUND_HEIGHT = (620)
-gravity = (2)
-jump_limit = GROUND_HEIGHT - 20
+WIDTH = 480
+HEIGHT = 640
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 #Colors
 BLACK = (0,0,0)
@@ -16,26 +15,30 @@ BLUE = (78,113,228)
 GREEN = (55,206,45)
 GREY = (181, 181, 181)
 
-#Mario Position
-x = (240)
-y = (620)
-velocity = 3
+#Mario sprite
+mario = pygame.sprite.Sprite()
+mario_width = 40
+mario_height = 60
+mario.image = pygame.Surface((mario_width,mario_height))
+mario.image.fill(BLUE)
+mario.rect = mario.image.get_rect()
+mario_group = pygame.sprite.GroupSingle(mario)
 
-#functions 
-def drawing(screen, BLACK, WHITE, GREY, x, y):
-    screen.fill(BLACK)  # Fills the screen with black
-    pygame.draw.rect(
-        (screen), (BLUE), ((x,y),(10,-20)),) #draws mario
-    pygame.draw.rect((screen), (WHITE), ((0,620),(480,20)),) #draws floor
-    pygame.draw.rect((screen), (WHITE), ((0,580),(400,-5)),) #draws second floor
-    pygame.draw.rect((screen), (WHITE), ((80,535),(400,-5)),) #draws third floor
-    
+#Sprite sizes
+TILE_SIZE = 8
 
-
-
-#Setup
-screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
-pygame.display.set_caption ("MAIN")
+#platforms
+platform_list = [[96, 32, WHITE, 64, 96], [64, 32, WHITE, 320, 128]]
+platforms = pygame.sprite.OrderedUpdates()
+for platform_nums in platform_list:
+    width, height, colour, x, y = platform_nums
+    platform = pygame.sprite.Sprite()
+    platform.image = pygame.Surface((width,height))
+    platform.image.fill(WHITE)
+    platform.rect = platform.image.get_rect()
+    platform.rect.left = x
+    platform.rect.top = HEIGHT-y
+    platforms.add(platform)
 
 #MAIN LOOP --------------------------------------------
 game_over = False
@@ -46,38 +49,23 @@ while not game_over:
             game_over = True
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_LEFT]: #moves mario left
-        x = x - 1 * velocity
-    if keys[pygame.K_RIGHT]: #moves mario right
-        x = x + 1 * velocity
-    if keys[pygame.K_SPACE] and y > jump_limit: #makes mario jump
-        y = y - 4
-    if y < GROUND_HEIGHT: #gives mario gravity
-        y = y + 1 * gravity
-    #ground height detect
-    if y < 575 and y > 535:
-        GROUND_HEIGHT = 575
-    if x > 400 and y < 580:
-        GROUND_HEIGHT = 620
-    if y < 540:
-        GROUND_HEIGHT = 535
-    #ceiling detection
-    if y > 580 and x < 400:
-        jump_limit = 600
-    if y > 540 and x < 80:
-        jump_limit = 470
-    else:
-        jump_limit = 555
-    #edge dtection
-    if x > 470:
-        x = 470
-    if x < 0:
-        x = 0
-
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_UP:
+            mario.rect.top -= TILE_SIZE
+        elif event.key == pygame.K_DOWN:
+            mario.rect.top += TILE_SIZE
+        elif event.key == pygame.K_RIGHT:
+            mario.rect.right += TILE_SIZE
+        elif event.key == pygame.K_LEFT:
+            mario.rect.right -= TILE_SIZE
     
-    drawing(screen, BLACK, WHITE, GREY, x, y)
-    print(x,y)
+    #collision
+    #pygame.sprite.groupcollide(mario, platforms, False, False)
 
+    #updates
+    screen.fill((0, 0, 0))
+    platforms.draw(screen)
+    mario_group.draw(screen)
     pygame.display.update()
 
 
