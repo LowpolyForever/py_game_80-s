@@ -60,7 +60,7 @@ while not game_over:
             mario.rect.right -= TILE_SIZE
     
     #collision
-    #pygame.sprite.groupcollide(mario, platforms, False, False)
+    pygame.sprite.groupcollide(mario_group, platforms, False, False)
 
     #updates
     screen.fill((0, 0, 0))
