@@ -17,8 +17,8 @@ GREY = (181, 181, 181)
 
 #Mario sprite
 mario = pygame.sprite.Sprite()
-mario_width = 40
-mario_height = 60
+mario_width = 20
+mario_height = 40
 mario.image = pygame.Surface((mario_width,mario_height))
 mario.image.fill(BLUE)
 mario.rect = mario.image.get_rect()
@@ -59,9 +59,20 @@ while not game_over:
         elif event.key == pygame.K_LEFT:
             mario.rect.right -= TILE_SIZE
     
+    #gravity 
+  
+    
     #collision
-    pygame.sprite.groupcollide(mario_group, platforms, False, False)
-
+    collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
+    for platform in collisions:
+        if mario.rect.left < platform.rect.right:
+            mario.rect.right += TILE_SIZE
+        
+    if mario.rect.bottom > 640:
+        mario.rect.bottom -= TILE_SIZE
+    if mario.rect.top < 0:
+        mario.rect.top += TILE_SIZE
+  
     #updates
     screen.fill((0, 0, 0))
     platforms.draw(screen)
