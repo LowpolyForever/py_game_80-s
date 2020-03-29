@@ -67,11 +67,16 @@ while not game_over:
     for platform in collisions:
         if mario.rect.left < platform.rect.right:
             mario.rect.right += TILE_SIZE
-        
+    
+    #Border collisions
     if mario.rect.bottom > 640:
         mario.rect.bottom -= TILE_SIZE
     if mario.rect.top < 0:
         mario.rect.top += TILE_SIZE
+    if mario.rect.right > 484:
+        mario.rect.right -= TILE_SIZE
+    if mario.rect.left < 0:
+        mario.rect.left += TILE_SIZE
   
     #updates
     screen.fill((0, 0, 0))
