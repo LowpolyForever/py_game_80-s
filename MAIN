@@ -7,6 +7,8 @@ pygame.init()
 WIDTH = 480
 HEIGHT = 640
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+JUMP_LIMIT = 30
+jump_counter = 0
 
 #Colors
 BLACK = (0,0,0)
@@ -22,13 +24,14 @@ mario_height = 40
 mario.image = pygame.Surface((mario_width,mario_height))
 mario.image.fill(BLUE)
 mario.rect = mario.image.get_rect()
+mario.rect.bottom = 640
 mario_group = pygame.sprite.GroupSingle(mario)
 
 #Sprite sizes
 TILE_SIZE = 8
 
 #platforms
-platform_list = [[96, 32, WHITE, 64, 96], [64, 32, WHITE, 320, 128]]
+platform_list = [[400, 15, WHITE, 0, 100], [400, 15, WHITE, 80, 200], [400, 15, WHITE, 0, 300], [400, 15, WHITE, 80, 400], [400, 15, WHITE, 0, 500], [120, 15, WHITE, 180, 580]]
 platforms = pygame.sprite.OrderedUpdates()
 for platform_nums in platform_list:
     width, height, colour, x, y = platform_nums
@@ -50,27 +53,32 @@ while not game_over:
     keys = pygame.key.get_pressed()
 
     if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_UP:
-            mario.rect.top -= TILE_SIZE
-        elif event.key == pygame.K_DOWN:
-            mario.rect.top += TILE_SIZE
-        elif event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_RIGHT:
             mario.rect.right += TILE_SIZE
+            collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
+            for platform in collisions:
+                mario.rect.right -= TILE_SIZE
         elif event.key == pygame.K_LEFT:
             mario.rect.right -= TILE_SIZE
-    
+            collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
+            for platform in collisions:
+                mario.rect.right += TILE_SIZE
+        elif event.key == pygame.K_UP:
+            mario.rect.top -= TILE_SIZE
+            collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
+            for platform in collisions:
+                mario.rect.top += TILE_SIZE
+
     #gravity 
-  
-    
-    #collision
+    mario.rect.bottom += 4
     collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
     for platform in collisions:
-        if mario.rect.left < platform.rect.right:
-            mario.rect.right += TILE_SIZE
+        mario.rect.bottom -= 4
+
     
     #Border collisions
     if mario.rect.bottom > 640:
-        mario.rect.bottom -= TILE_SIZE
+        mario.rect.bottom -= 4
     if mario.rect.top < 0:
         mario.rect.top += TILE_SIZE
     if mario.rect.right > 484:
