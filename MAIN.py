@@ -7,8 +7,6 @@ pygame.init()
 WIDTH = 480
 HEIGHT = 640
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-JUMP_LIMIT = 30
-jump_counter = 0
 
 #Colors
 BLACK = (0,0,0)
@@ -24,7 +22,7 @@ mario_height = 40
 mario.image = pygame.Surface((mario_width,mario_height))
 mario.image.fill(BLUE)
 mario.rect = mario.image.get_rect()
-mario.rect.bottom = 640
+mario.rect.bottom = 689
 mario_group = pygame.sprite.GroupSingle(mario)
 
 #Sprite sizes
@@ -32,7 +30,8 @@ TILE_SIZE = 8
 
 #platforms
 platform_list = [[400, 15, WHITE, 0, 100], [400, 15, WHITE, 80, 200], 
-[400, 15, WHITE, 0, 300], [400, 15, WHITE, 80, 400], [400, 15, WHITE, 0, 500], [120, 15, WHITE, 180, 580]]
+[400, 15, WHITE, 0, 300], [400, 15, WHITE, 80, 400], [400, 15, WHITE, 0, 500], 
+[120, 15, WHITE, 180, 580], [480, 30, WHITE, 0, 1]]
 platforms = pygame.sprite.OrderedUpdates()
 for platform_nums in platform_list:
     width, height, colour, x, y = platform_nums
@@ -46,6 +45,7 @@ for platform_nums in platform_list:
 
 #MAIN LOOP --------------------------------------------
 game_over = False
+grav_change_down = 0
 while not game_over:
     pygame.time.delay(10)#delays each frame by 10 millisecs
     for event in pygame.event.get():
@@ -71,15 +71,17 @@ while not game_over:
                 mario.rect.top += TILE_SIZE
 
     #gravity 
-    mario.rect.bottom += 4
+    if grav_change_down == 0:
+        grav_change_down = 1
+    else:
+        grav_change_down += 0.20
+    mario.rect.bottom += grav_change_down
     collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
     for platform in collisions:
         mario.rect.bottom -= 4
+        grav_change_down = 0
 
-    
     #Border collisions
-    if mario.rect.bottom > 640:
-        mario.rect.bottom -= 4
     if mario.rect.top < 0:
         mario.rect.top += TILE_SIZE
     if mario.rect.right > 484:
