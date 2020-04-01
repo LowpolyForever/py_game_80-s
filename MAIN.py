@@ -22,7 +22,7 @@ mario_height = 40
 mario.image = pygame.Surface((mario_width,mario_height))
 mario.image.fill(BLUE)
 mario.rect = mario.image.get_rect()
-mario.rect.bottom = 689
+mario.rect.bottom = 639
 mario_group = pygame.sprite.GroupSingle(mario)
 
 #Sprite sizes
@@ -46,6 +46,8 @@ for platform_nums in platform_list:
 #MAIN LOOP --------------------------------------------
 game_over = False
 grav_change_down = 0
+mario_change_down = 0
+mario_change_x = 0
 while not game_over:
     pygame.time.delay(10)#delays each frame by 10 millisecs
     for event in pygame.event.get():
@@ -55,15 +57,9 @@ while not game_over:
 
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT:
-            mario.rect.right += TILE_SIZE
-            collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
-            for platform in collisions:
-                mario.rect.right -= TILE_SIZE
+            mario_change_x = TILE_SIZE
         elif event.key == pygame.K_LEFT:
-            mario.rect.right -= TILE_SIZE
-            collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
-            for platform in collisions:
-                mario.rect.right += TILE_SIZE
+            mario_change_x = -TILE_SIZE
         elif event.key == pygame.K_UP:
             mario.rect.top -= TILE_SIZE
             collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
@@ -78,16 +74,19 @@ while not game_over:
     mario.rect.bottom += grav_change_down
     collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
     for platform in collisions:
-        mario.rect.bottom -= 4
+        mario.rect.bottom -= grav_change_down
         grav_change_down = 0
 
     #Border collisions
     if mario.rect.top < 0:
         mario.rect.top += TILE_SIZE
-    if mario.rect.right > 484:
+    if mario.rect.right > 480:
         mario.rect.right -= TILE_SIZE
     if mario.rect.left < 0:
         mario.rect.left += TILE_SIZE
+
+    #collision mayhem
+    
   
     #updates
     screen.fill((0, 0, 0))
