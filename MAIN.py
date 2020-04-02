@@ -46,14 +46,12 @@ for platform_nums in platform_list:
 #MAIN LOOP --------------------------------------------
 game_over = False
 grav_change_down = 0
-mario_change_down = 0
 mario_change_x = 0
 while not game_over:
     pygame.time.delay(10)#delays each frame by 10 millisecs
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: #Quits Game when escape key pressed
             game_over = True
-    keys = pygame.key.get_pressed()
 
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT:
@@ -61,32 +59,44 @@ while not game_over:
         elif event.key == pygame.K_LEFT:
             mario_change_x = -TILE_SIZE
         elif event.key == pygame.K_UP:
-            mario.rect.top -= TILE_SIZE
-            collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
-            for platform in collisions:
-                mario.rect.top += TILE_SIZE
+            grav_change_down = -TILE_SIZE 
+    
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_RIGHT and mario_change_x > 0:
+            mario_change_x = 0
+        if event.key == pygame.K_LEFT and mario_change_x < 0:
+            mario_change_x = 0
 
     #gravity 
     if grav_change_down == 0:
         grav_change_down = 1
     else:
-        grav_change_down += 0.20
+        grav_change_down += 0.40
     mario.rect.bottom += grav_change_down
-    collisions = pygame.sprite.groupcollide(mario_group, platforms, False, False)
+    collisions = pygame.sprite.spritecollide(mario, platforms, False)
     for platform in collisions:
-        mario.rect.bottom -= grav_change_down
+        if grav_change_down > 0:
+            mario.rect.bottom = platform.rect.top
+        if grav_change_down < 0:
+            mario.rect.top = platform.rect.bottom
         grav_change_down = 0
+    
+    #collisions
+    mario.rect.right += mario_change_x
+    collisions = pygame.sprite.spritecollide(mario, platforms, False)
+    for platform in collisions:#right
+        if mario_change_x > 0:
+            mario.rect.right = platform.rect.left
+        elif mario_change_x < 0:
+            mario.rect.left = platform.rect.right
 
     #Border collisions
     if mario.rect.top < 0:
-        mario.rect.top += TILE_SIZE
+        mario.rect.top = 0
     if mario.rect.right > 480:
-        mario.rect.right -= TILE_SIZE
+        mario.rect.right = 480
     if mario.rect.left < 0:
-        mario.rect.left += TILE_SIZE
-
-    #collision mayhem
-    
+        mario.rect.left = 0
   
     #updates
     screen.fill((0, 0, 0))
