@@ -1,5 +1,6 @@
 #Scuffed Donky KONG (Brian, Leo, Harris)
 
+import time
 import pygame
 pygame.init()
 
@@ -7,6 +8,9 @@ pygame.init()
 WIDTH = 480
 HEIGHT = 640
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+TILE_SIZE = 5
+JUMP_SIZE = 4
+BARREL_MOVE = 6
 
 #Colors
 BLACK = (0,0,0)
@@ -17,6 +21,7 @@ GREY = (181, 181, 181)
 
 #Mario sprite
 mario = pygame.sprite.Sprite()
+marios = pygame.sprite.OrderedUpdates()
 mario_width = 20
 mario_height = 40
 mario.image = pygame.Surface((mario_width,mario_height))
@@ -24,9 +29,22 @@ mario.image.fill(BLUE)
 mario.rect = mario.image.get_rect()
 mario.rect.bottom = 639
 mario_group = pygame.sprite.GroupSingle(mario)
+marios.add(mario)
 
-#Sprite sizes
-TILE_SIZE = 8
+pygame.time.set_timer(pygame.USEREVENT, 3000)
+
+#Barrels
+barrel_list = [[15, 15, GREEN, 15, 140]]
+barrels = pygame.sprite.OrderedUpdates()
+for barrel_nums in barrel_list:
+    width, height, colour, x, y = barrel_nums
+    barrel = pygame.sprite.Sprite()
+    barrel.image = pygame.Surface((width,height))
+    barrel.image.fill(GREEN)
+    barrel.rect = barrel.image.get_rect()
+    barrel.rect.left = x
+    barrel.rect.bottom = y
+    barrels.add(barrel)
 
 #platforms
 platform_list = [[400, 15, WHITE, 0, 100], [400, 15, WHITE, 80, 200], 
@@ -45,6 +63,8 @@ for platform_nums in platform_list:
 
 #MAIN LOOP --------------------------------------------
 game_over = False
+win = False
+loose = False
 grav_change_down = 0
 mario_change_x = 0
 while not game_over:
@@ -59,7 +79,7 @@ while not game_over:
         elif event.key == pygame.K_LEFT:
             mario_change_x = -TILE_SIZE
         elif event.key == pygame.K_UP:
-            grav_change_down = -TILE_SIZE 
+            grav_change_down = -JUMP_SIZE
     
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_RIGHT and mario_change_x > 0:
@@ -67,11 +87,35 @@ while not game_over:
         if event.key == pygame.K_LEFT and mario_change_x < 0:
             mario_change_x = 0
 
+    #Barrel animation
+    if win == False and loose == False:
+        if barrel.rect.bottom == 140 and barrel.rect.right <= 460:
+            barrel.rect.right += 5
+        if barrel.rect.bottom >= 140 and barrel.rect.bottom < 240 and barrel.rect.right == 460:
+            barrel.rect.top += 5
+        if barrel.rect.bottom == 240 and barrel.rect.right >= 40:
+            barrel.rect.right -= 5
+        if barrel.rect.bottom >= 240 and barrel.rect.bottom < 340 and barrel.rect.right == 35:
+            barrel.rect.top += 5
+        if barrel.rect.bottom == 340 and barrel.rect.right <= 460:
+            barrel.rect.right += 5
+        if barrel.rect.bottom >= 340 and barrel.rect.bottom < 440 and barrel.rect.right == 460:
+            barrel.rect.top += 5
+        if barrel.rect.bottom == 440 and barrel.rect.right >= 40:
+            barrel.rect.right -= 5
+        if barrel.rect.bottom >= 440 and barrel.rect.bottom < 540 and barrel.rect.right == 35:
+            barrel.rect.top += 5
+        if barrel.rect.bottom == 540 and barrel.rect.right <= 460:
+            barrel.rect.right += 5
+        if barrel.rect.bottom == 540 and barrel.rect.right == 460:
+            barrel.rect.bottom = 140
+            barrel.rect.left = 15
+
     #gravity 
     if grav_change_down == 0:
         grav_change_down = 1
     else:
-        grav_change_down += 0.40
+        grav_change_down += 0.60
     mario.rect.bottom += grav_change_down
     collisions = pygame.sprite.spritecollide(mario, platforms, False)
     for platform in collisions:
@@ -90,6 +134,20 @@ while not game_over:
         elif mario_change_x < 0:
             mario.rect.left = platform.rect.right
 
+    #Barrel movement
+    #print (barrels)
+
+    #barrel endgame
+    pygame.sprite.groupcollide(mario_group, barrels, True, True)
+    if len(marios) == 0:
+        loose = True
+    
+    #win 
+    if mario.rect.top < 100 and mario.rect.left < 400:
+        mario.rect.left = 255
+        mario.rect.top = 20
+        win = True
+
     #Border collisions
     if mario.rect.top < 0:
         mario.rect.top = 0
@@ -98,11 +156,30 @@ while not game_over:
     if mario.rect.left < 0:
         mario.rect.left = 0
   
-    #updates
+    #clear screen
     screen.fill((0, 0, 0))
+
+    #win sreen
+    if win:
+        font = pygame.font.Font(None, 36) 
+        text_image = font.render("You Win!", True, (255, 255, 255))
+        text_rect = text_image.get_rect(centerx=WIDTH/2, centery=100) 
+        screen.blit(text_image, text_rect)
+
+    #loose screen
+    if loose:
+        font = pygame.font.Font(None, 36) 
+        text_image = font.render("You Loose!", True, (255, 255, 255))
+        text_rect = text_image.get_rect(centerx=WIDTH/2, centery=100) 
+        screen.blit(text_image, text_rect)
+
+    #updates
+    barrels.draw(screen)
     platforms.draw(screen)
     mario_group.draw(screen)
     pygame.display.update()
+
+    
 
 
 
