@@ -34,17 +34,14 @@ marios.add(mario)
 pygame.time.set_timer(pygame.USEREVENT, 3000)
 
 #Barrels
-barrel_list = [[15, 15, GREEN, 15, 140]]
 barrels = pygame.sprite.OrderedUpdates()
-for barrel_nums in barrel_list:
-    width, height, colour, x, y = barrel_nums
-    barrel = pygame.sprite.Sprite()
-    barrel.image = pygame.Surface((width,height))
-    barrel.image.fill(GREEN)
-    barrel.rect = barrel.image.get_rect()
-    barrel.rect.left = x
-    barrel.rect.bottom = y
-    barrels.add(barrel)
+barrel = pygame.sprite.Sprite()
+barrel.image = pygame.Surface((15,15))
+barrel.image.fill(GREEN)
+barrel.rect = barrel.image.get_rect()
+barrel.rect.left = 15
+barrel.rect.bottom = 140
+barrels.add(barrel)
 
 #platforms
 platform_list = [[400, 15, WHITE, 0, 100], [400, 15, WHITE, 80, 200], 
@@ -67,6 +64,7 @@ win = False
 loose = False
 grav_change_down = 0
 mario_change_x = 0
+pygame.time.set_timer(pygame.USEREVENT, 3000)
 while not game_over:
     pygame.time.delay(10)#delays each frame by 10 millisecs
     for event in pygame.event.get():
@@ -89,22 +87,19 @@ while not game_over:
 
     #Barrel animation
     if win == False and loose == False:
-        if barrel.rect.bottom == 140 and barrel.rect.right <= 460:
-            barrel.rect.right += 5
-        if barrel.rect.bottom >= 140 and barrel.rect.bottom < 240 and barrel.rect.right == 460:
-            barrel.rect.top += 5
-        if barrel.rect.bottom == 240 and barrel.rect.right >= 40:
-            barrel.rect.right -= 5
-        if barrel.rect.bottom >= 240 and barrel.rect.bottom < 340 and barrel.rect.right == 35:
-            barrel.rect.top += 5
-        if barrel.rect.bottom == 340 and barrel.rect.right <= 460:
-            barrel.rect.right += 5
-        if barrel.rect.bottom >= 340 and barrel.rect.bottom < 440 and barrel.rect.right == 460:
-            barrel.rect.top += 5
-        if barrel.rect.bottom == 440 and barrel.rect.right >= 40:
-            barrel.rect.right -= 5
-        if barrel.rect.bottom >= 440 and barrel.rect.bottom < 540 and barrel.rect.right == 35:
-            barrel.rect.top += 5
+        y1= 140
+        y2 = 240
+        for i in range(2):
+            if barrel.rect.bottom == y1 and barrel.rect.right <= 460:
+                barrel.rect.right += 5
+            if barrel.rect.bottom >= y1 and barrel.rect.bottom < y2 and barrel.rect.right == 460:
+                barrel.rect.top += 5
+            if barrel.rect.bottom == y2 and barrel.rect.right >= 40:
+                barrel.rect.right -= 5
+            y1 = y1 + 200
+            if barrel.rect.bottom >= y2 and barrel.rect.bottom < y1 and barrel.rect.right == 35:
+                barrel.rect.top += 5
+            y2 = y2 + 200
         if barrel.rect.bottom == 540 and barrel.rect.right <= 460:
             barrel.rect.right += 5
         if barrel.rect.bottom == 540 and barrel.rect.right == 460:
@@ -133,9 +128,6 @@ while not game_over:
             mario.rect.right = platform.rect.left
         elif mario_change_x < 0:
             mario.rect.left = platform.rect.right
-
-    #Barrel movement
-    #print (barrels)
 
     #barrel endgame
     pygame.sprite.groupcollide(mario_group, barrels, True, True)
