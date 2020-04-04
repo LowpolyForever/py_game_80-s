@@ -77,7 +77,11 @@ while not game_over:
         elif event.key == pygame.K_LEFT:
             mario_change_x = -TILE_SIZE
         elif event.key == pygame.K_UP:
-            grav_change_down = -JUMP_SIZE
+            mario.rect.top -= 1
+            mario.rect.top += 1
+            collisions = pygame.sprite.spritecollide(mario, platforms, False)
+            if mario.rect.bottom == platform.rect.top:
+                grav_change_down = -JUMP_SIZE
     
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_RIGHT and mario_change_x > 0:
@@ -110,7 +114,7 @@ while not game_over:
     if grav_change_down == 0:
         grav_change_down = 1
     else:
-        grav_change_down += 0.60
+        grav_change_down += 0.08
     mario.rect.bottom += grav_change_down
     collisions = pygame.sprite.spritecollide(mario, platforms, False)
     for platform in collisions:
@@ -165,6 +169,7 @@ while not game_over:
         text_rect = text_image.get_rect(centerx=WIDTH/2, centery=100) 
         screen.blit(text_image, text_rect)
 
+    
     #updates
     barrels.draw(screen)
     platforms.draw(screen)
